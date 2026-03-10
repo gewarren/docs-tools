@@ -41,7 +41,9 @@ class Program
             MergeAndAnnotate(intelliSenseDir, ecmaxmlDir);
         });
 
-        return rootCommand.Parse(args).Invoke();
+        ParseResult pResult = rootCommand.Parse(args);
+        return pResult.Invoke();
+        //return rootCommand.Parse(args).Invoke();
     }
 
     static void MergeAndAnnotate(DirectoryInfo iXmlDir, DirectoryInfo ecmaxmlDir)

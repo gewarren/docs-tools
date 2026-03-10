@@ -66,7 +66,8 @@ internal class XmlHelper
 
         IEnumerable<XAttribute> attributes = element.Attributes();
 
-        // Workaround: <x> will ensure XElement does not complain about having an invalid xml object inside. Those tags will be removed by replacing the nodes.
+        // Workaround: <x> will ensure XElement does not complain about having an invalid xml object inside.
+        // Those tags will be removed by replacing the nodes.
         XElement parsedElement;
         try
         {
@@ -79,7 +80,7 @@ internal class XmlHelper
 
         element.ReplaceNodes(parsedElement.Nodes());
 
-        // Ensure attributes are preserved after replacing nodes
+        // Ensure attributes are preserved after replacing nodes.
         element.ReplaceAttributes(attributes);
     }
 

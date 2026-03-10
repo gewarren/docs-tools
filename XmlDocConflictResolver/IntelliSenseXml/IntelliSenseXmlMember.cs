@@ -123,7 +123,14 @@ internal class IntelliSenseXmlMember
 
             // Update the XElement.
             XElement? xElement = _xEMember.Element("summary");
-            if (xElement != null) { xElement.Value = value; }
+            if (xElement != null)
+            {
+                xElement.Value = value;
+            }
+            else
+            {
+                _xEMember.Add(new XElement("summary", value));
+            }
         }
     }
 
@@ -145,7 +152,14 @@ internal class IntelliSenseXmlMember
 
             // Update the XElement.
             XElement? xElement = _xEMember.Element("value");
-            if (xElement != null) { xElement.Value = value; }
+            if (xElement != null)
+            {
+                xElement.Value = value;
+            }
+            else
+            {
+                _xEMember.Add(new XElement("value", value));
+            }
         }
     }
 
@@ -167,7 +181,14 @@ internal class IntelliSenseXmlMember
 
             // Update the XElement.
             XElement? xElement = _xEMember.Element("returns");
-            if (xElement != null) { xElement.Value = value; }
+            if (xElement != null)
+            {
+                xElement.Value = value;
+            }
+            else
+            {
+                _xEMember.Add(new XElement("returns", value));
+            }
         }
     }
 
@@ -189,7 +210,18 @@ internal class IntelliSenseXmlMember
 
             // Update the XElement.
             XElement? xElement = _xEMember.Element("remarks");
-            if (xElement != null) { xElement.Value = value; }
+            if (xElement != null)
+            {
+                xElement.Value = value;
+            }
+            else
+            {
+                // TODO: Uncomment the next line if you want remarks ported
+                // from ECMAXML to the IntelliSense XML file.
+                // Note that the formatting might be incorrect for XML.
+
+                //_xEMember.Add(new XElement("remarks", value));
+            }
         }
     }
 

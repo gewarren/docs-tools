@@ -18,10 +18,11 @@ internal class IntelliSenseXmlCommentsContainer
 
     // The IntelliSense xml files do not separate types
     // from members like ECMA xml files - everything is a member.
-    public Dictionary<string, IntelliSenseXmlMember> Members = new();
-    public Dictionary<string, IntelliSenseXmlFile> Files = new();
+    public Dictionary<string, IntelliSenseXmlMember> Members = [];
+    public Dictionary<string, IntelliSenseXmlFile> Files = [];
 
-    public IntelliSenseXmlCommentsContainer(DirectoryInfo intellisenseXmlDir) => IntelliSenseXmlDir = intellisenseXmlDir;
+    public IntelliSenseXmlCommentsContainer(DirectoryInfo intellisenseXmlDir)
+        => IntelliSenseXmlDir = intellisenseXmlDir;
 
     internal IEnumerable<FileInfo> EnumerateFiles()
     {
@@ -43,7 +44,7 @@ internal class IntelliSenseXmlCommentsContainer
 
     internal void ParseIntellisenseXmlDoc(XDocument xDoc, string filePath, Encoding fileEncoding)
     {
-        IntelliSenseXmlFile xmlFile = new IntelliSenseXmlFile(xDoc, filePath, fileEncoding);
+        IntelliSenseXmlFile xmlFile = new(xDoc, filePath, fileEncoding);
         Files.Add(filePath, xmlFile);
 
         if (!TryGetAssemblyName(xDoc, filePath, out string? assembly))
@@ -147,7 +148,7 @@ internal class IntelliSenseXmlCommentsContainer
 
     public void SaveToDisk()
     {
-        List<string> savedFiles = new();
+        List<string> savedFiles = [];
         foreach (IntelliSenseXmlFile xmlFile in Files.Values.Where(x => x.Changed))
         {
             string docsVersionFileName = xmlFile.FilePath.Replace(".xml", _docsVersionSuffix);

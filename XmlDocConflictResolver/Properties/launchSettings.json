@@ -2,7 +2,7 @@
   "profiles": {
     "XmlDocConflictResolver": {
       "commandName": "Project",
-      "commandLineArgs": "--ixml \"C:\\Users\\gewarren\\Desktop\\Test Files\\Logging.Console\" --ecmaxml C:\\Users\\gewarren\\dotnet-api-docs\\xml > output.txt"
+      "commandLineArgs": "--isenseDir c:\\users\\gewarren\\binaries\\dotnet\\net-10.0 --ecmaxmlDir c:\\users\\gewarren\\dotnet-api-docs\\xml\\System.Diagnostics"
     }
   }
 }

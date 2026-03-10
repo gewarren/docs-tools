@@ -125,13 +125,13 @@ internal class ConflictChecker
 
     internal void Start()
     {
-        if (!_intelliSenseXmlComments.Members.Any())
+        if (_intelliSenseXmlComments.Members.Count == 0)
         {
             Log.Error("No IntelliSense XML comments found.");
             return;
         }
 
-        if (!_docsComments.Types.Any())
+        if (_docsComments.Types.Count == 0)
         {
             Log.Error("No docs type APIs found.");
             return;
@@ -219,8 +219,9 @@ internal class ConflictChecker
             }
 
             // Ignoring: altmember, seealso, related tags.
+            // TODO: Should we unignore??
 
-            // These XML tags are only for non-type APIs.
+            // Property and Exception XML tags are only for "member" APIs.
             if (ecmaxmlApi.Kind == APIKind.Member)
             {
                 // Property value.
@@ -256,7 +257,14 @@ internal class ConflictChecker
         bool nestedType = false;
 
         // Files are named by type and in a folder with the name of the namespace.
-        var directories = _docsXmlDir.EnumerateDirectories(ixmlMember.Namespace, SearchOption.AllDirectories);
+        IEnumerable<DirectoryInfo> directories = _docsXmlDir.EnumerateDirectories(ixmlMember.Namespace, SearchOption.AllDirectories);
+        
+        // Check if _docsXmlDir itself is the namespace directory
+        if (!directories.Any() && _docsXmlDir.Name == ixmlMember.Namespace)
+        {
+            directories = [_docsXmlDir];
+        }
+        
         if (!directories.Any())
         {
             // This could be because it's a nested class and the namespace was calculated incorrectly.
@@ -266,6 +274,14 @@ internal class ConflictChecker
 
             string newNamespace = ixmlMember.Namespace[..ixmlMember.Namespace.LastIndexOf('.')];
             directories = _docsXmlDir.EnumerateDirectories(newNamespace, SearchOption.AllDirectories);
+            
+            // Check if _docsXmlDir itself is the namespace directory
+            if (!directories.Any() && _docsXmlDir.Name == newNamespace)
+            {
+                directories = new[] { _docsXmlDir };
+                nestedType = true;
+            }
+            
             if (!directories.Any())
                 return null;
             else
@@ -289,7 +305,7 @@ internal class ConflictChecker
             typeName = ixmlMember.Name[(ixmlMember.Name.LastIndexOf('.') + 1)..];
 
         IEnumerable<FileInfo>? files = null;
-        foreach (var directory in directories)
+        foreach (DirectoryInfo directory in directories)
         {
             // Look for typename.xml.
             files = directory.EnumerateFiles(string.Concat(typeName, ".xml"), SearchOption.TopDirectoryOnly);
